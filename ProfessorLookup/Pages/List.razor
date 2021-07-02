@@ -1,0 +1,53 @@
+﻿@page "/list"
+@inject HttpClient Http
+@using ProfessorLookup.Models
+
+<div class="form-group">
+    <input class="form-control" type="text" placeholder="Search..." @bind="Filter" @bind:event="oninput" />
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var professor in professors)
+        {
+            if (!IsFiltered(professor))
+                continue;
+            <tr>
+                <td>@professor.FirstName</td>
+                <td>@professor.LastName</td>
+                <td>@professor.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Professor> professors = new();
+
+    public string Filter { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        professors = await Http.GetFromJsonAsync<List<Professor>>("professors.json");
+    }
+
+    public bool IsFiltered(Professor professor)
+    {
+        if (string.IsNullOrEmpty(Filter))
+            return true;
+
+        if (professor.FirstName.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (professor.LastName.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+}
