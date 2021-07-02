@@ -22,7 +22,7 @@ jobs:
       
     # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
     - name: Add .nojekyll file
-      run: touch ProfessorLookup/release/wwwroot/.nojekyll
+      run: touch release/wwwroot/.nojekyll
       
     - name: Commit wwwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@4.1.4
